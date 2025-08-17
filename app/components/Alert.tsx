@@ -1,7 +1,10 @@
 import React from 'react';
+import MuiAlert from '@mui/material/Alert';
 
 const Alert = ({ message }: { message: string }) => (
-  <div className="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 mb-4 rounded">{message}</div>
+  <MuiAlert severity="warning" sx={{ mb: 2 }}>
+    {message}
+  </MuiAlert>
 );
 
 export default Alert;

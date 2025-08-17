@@ -1,6 +1,9 @@
 'use client';
 
 import React from 'react';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import Paper from '@mui/material/Paper';
 
 import DetailedRadialChart from './DetailedRadialChart';
 import Alert from './Alert';
@@ -13,25 +16,32 @@ const Dashboard = () => {
   const totalThisMonth = 9200;
   const percent = (totalThisMonth / maxLimit) * 100;
   return (
-    <div className="p-4 max-w-3xl mx-auto">
-      <h1 className="text-2xl font-bold mb-4">Dashboard</h1>
+    <Box sx={{ p: 2, maxWidth: 700, mx: 'auto' }}>
+      <Typography variant="h4" fontWeight="bold" mb={2}>
+        Dashboard
+      </Typography>
       {percent >= 90 && <Alert message={`Warning: You have used ${percent.toFixed(0)}% of your monthly limit!`} />}
-      <div className="flex flex-col md:flex-row gap-6 items-center mb-6">
+      <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, gap: 3, alignItems: 'center', mb: 3 }}>
         <DetailedRadialChart value={percent} max={maxLimit} total={totalThisMonth} />
         <ExpenseStats total={totalThisMonth} max={maxLimit} />
-      </div>
-      <div className="flex flex-col md:flex-row gap-6 items-center mb-6">
-        <CategoryDoughnutChart
-          data={[
-            { label: 'Foods', value: 10 },
-            { label: 'Groceries', value: 20 },
-            { label: 'Transport', value: 15 },
-            { label: 'Bills', value: 25 },
-            { label: 'Other', value: 30 },
-          ]}
-        />
-      </div>
-    </div>
+      </Box>
+      <Paper sx={{ p: 2, my: 3 }}>
+        <Typography variant="h6" fontWeight={600} mb={2}>
+          Expense Breakdown
+        </Typography>
+        <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, gap: 3, alignItems: 'center' }}>
+          <CategoryDoughnutChart
+            data={[
+              { label: 'Foods', value: 10 },
+              { label: 'Groceries', value: 20 },
+              { label: 'Transport', value: 15 },
+              { label: 'Bills', value: 25 },
+              { label: 'Other', value: 30 },
+            ]}
+          />
+        </Box>
+      </Paper>
+    </Box>
   );
 };
 

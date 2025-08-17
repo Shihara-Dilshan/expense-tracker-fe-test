@@ -1,6 +1,7 @@
 import { ArcElement, Chart as ChartJS, Legend, Tooltip } from 'chart.js';
 import React from 'react';
 import { Doughnut } from 'react-chartjs-2';
+import Paper from '@mui/material/Paper';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -42,9 +43,9 @@ const ExpensePieChart: React.FC<ExpensePieChartProps> = ({ data }) => {
   } as const;
 
   return (
-    <div className="relative flex flex-col items-center justify-center" style={{ width: 320, height: 320 }}>
+    <Paper elevation={2} sx={{ width: 320, height: 320, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', position: 'relative', p: 2 }}>
       <Doughnut data={chartData} options={options} />
-    </div>
+    </Paper>
   );
 };
 

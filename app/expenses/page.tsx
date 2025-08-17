@@ -6,6 +6,9 @@ import ExpenseList from '../components/ExpenseList';
 import ExpenseForm from '../components/ExpenseForm';
 import { ExpenseInput } from '../../types';
 import { useAddExpense, useDeleteExpense, useExpenses } from '../api/hooks';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import Paper from '@mui/material/Paper';
 
 const ExpensesPage: React.FC = () => {
   const [filter, setFilter] = useState('');
@@ -27,12 +30,18 @@ const ExpensesPage: React.FC = () => {
   };
 
   return (
-    <div className="p-4 max-w-3xl mx-auto text-gray-800">
-      <h1 className="text-2xl font-bold mb-4 text-gray-900">Expenses</h1>
+    <Box sx={{ p: 2, maxWidth: 700, mx: 'auto' }}>
+      <Typography variant="h4" fontWeight="bold" mb={2}>
+        Expenses
+      </Typography>
       <FilterBar filter={filter} setFilter={setFilter} />
-      <ExpenseList expenses={filtered} onDelete={handleDelete} loading={isLoading}/>
-      <ExpenseForm onAdd={handleAdd} />
-    </div>
+      <Paper sx={{ p: 2, mb: 3 }}>
+        <ExpenseList expenses={filtered} onDelete={handleDelete} loading={isLoading} />
+      </Paper>
+      <Paper sx={{ p: 2 }}>
+        <ExpenseForm onAdd={handleAdd} />
+      </Paper>
+    </Box>
   );
 };
 

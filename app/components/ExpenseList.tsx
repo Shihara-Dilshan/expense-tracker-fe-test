@@ -1,3 +1,11 @@
+import Button from '@mui/material/Button';
+import Paper from '@mui/material/Paper';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
 import React from 'react';
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
@@ -12,68 +20,63 @@ interface ExpenseListProps {
 }
 
 const ExpenseList: React.FC<ExpenseListProps> = React.memo(({ expenses, onDelete, onEdit, loading }) => (
-  <div className="bg-white shadow rounded p-4 mb-4 overflow-x-auto text-gray-800">
-    {loading ? (
-      <table className="w-full text-left">
-        <thead>
-          <tr>
-            <th>Description</th>
-            <th>Date</th>
-            <th>Type</th>
-            <th>Amount</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          {Array.from({ length: 5 }).map((_, i) => (
-            <tr key={i}>
-              <td><Skeleton width={120} /></td>
-              <td><Skeleton width={80} /></td>
-              <td><Skeleton width={80} /></td>
-              <td><Skeleton width={60} /></td>
-              <td><Skeleton width={60} /></td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    ) : (
-      <table className="w-full text-left">
-        <thead>
-          <tr>
-            <th>Description</th>
-            <th>Date</th>
-            <th>Type</th>
-            <th>Amount</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          {expenses.map((exp) => (
-            <tr key={exp._id}>
-              <td>{exp.description}</td>
-              <td>{exp.date}</td>
-              <td>{exp.type}</td>
-              <td>
-                {exp.amount.toLocaleString()} <span className="text-gray-700">LKR</span>
-              </td>
-              <td className="flex gap-2">
+  <TableContainer component={Paper} sx={{ mb: 4 }}>
+    <Table>
+      <TableHead>
+        <TableRow>
+          <TableCell>Description</TableCell>
+          <TableCell>Date</TableCell>
+          <TableCell>Type</TableCell>
+          <TableCell>Amount</TableCell>
+          <TableCell></TableCell>
+        </TableRow>
+      </TableHead>
+      <TableBody>
+        {loading
+          ? Array.from({ length: 5 }).map((_, i) => (
+            <TableRow key={i}>
+              <TableCell>
+                <Skeleton width={120} />
+              </TableCell>
+              <TableCell>
+                <Skeleton width={80} />
+              </TableCell>
+              <TableCell>
+                <Skeleton width={80} />
+              </TableCell>
+              <TableCell>
+                <Skeleton width={60} />
+              </TableCell>
+              <TableCell>
+                <Skeleton width={60} />
+              </TableCell>
+            </TableRow>
+          ))
+          : expenses.map((exp) => (
+            <TableRow key={exp._id}>
+              <TableCell>{exp.description}</TableCell>
+              <TableCell>{exp.date}</TableCell>
+              <TableCell>{exp.type}</TableCell>
+              <TableCell>
+                {exp.amount.toLocaleString()} <span style={{ color: '#6b7280' }}>LKR</span>
+              </TableCell>
+              <TableCell>
                 {onEdit && (
-                  <button className="text-blue-600 hover:underline" onClick={() => onEdit(exp)}>
-                    Edit
-                  </button>
+                  <Button color="primary" size="small" onClick={() => onEdit(exp)}>
+                      Edit
+                  </Button>
                 )}
                 {onDelete && (
-                  <button className="text-red-600 hover:underline" onClick={() => onDelete(exp._id)}>
-                    Delete
-                  </button>
+                  <Button color="error" size="small" onClick={() => onDelete(exp._id)}>
+                      Delete
+                  </Button>
                 )}
-              </td>
-            </tr>
+              </TableCell>
+            </TableRow>
           ))}
-        </tbody>
-      </table>
-    )}
-  </div>
+      </TableBody>
+    </Table>
+  </TableContainer>
 ));
 
 ExpenseList.displayName = 'ExpenseList';

@@ -1,5 +1,9 @@
 import React, { useState, useCallback } from 'react';
 import { ExpenseInput } from '../../types';
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
+import MenuItem from '@mui/material/MenuItem';
+import Box from '@mui/material/Box';
 
 const initialState: ExpenseInput = {
   description: '',
@@ -15,9 +19,15 @@ interface ExpenseFormProps {
 const ExpenseForm: React.FC<ExpenseFormProps> = React.memo(({ onAdd }) => {
   const [form, setForm] = useState<ExpenseInput>(initialState);
 
-  const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setForm(f => ({ ...f, [name]: name === 'amount' ? Number(value) : value }));
+  }, []);
+
+  const handleSelectChange = useCallback((e: React.ChangeEvent<{ value: unknown; name?: string }>) => {
+    const { name, value } = e.target;
+    if (!name) return;
+    setForm(f => ({ ...f, [name]: value as string }));
   }, []);
 
   const handleSubmit = useCallback((e: React.FormEvent) => {
@@ -28,51 +38,56 @@ const ExpenseForm: React.FC<ExpenseFormProps> = React.memo(({ onAdd }) => {
   }, [form, onAdd]);
 
   return (
-    <form onSubmit={handleSubmit} className="bg-white shadow rounded p-4 mt-4 flex flex-col gap-3 text-gray-800">
-      <input
+    <Box component="form" onSubmit={handleSubmit} sx={{ boxShadow: 1, borderRadius: 2, p: 2, mt: 2, display: 'flex', flexDirection: 'column', gap: 2, bgcolor: 'background.paper' }}>
+      <TextField
         name="description"
+        label="Description"
         value={form.description}
         onChange={handleChange}
-        placeholder="Description"
-        className="border rounded px-2 py-1"
         required
+        fullWidth
       />
-      <input
+      <TextField
         name="date"
+        label="Date"
         type="date"
         value={form.date}
         onChange={handleChange}
-        className="border rounded px-2 py-1"
         required
+        fullWidth
+        InputLabelProps={{ shrink: true }}
       />
-      <select
+      <TextField
         name="type"
+        label="Type"
+        select
         value={form.type}
-        onChange={handleChange}
-        className="border rounded px-2 py-1"
+        onChange={handleSelectChange}
         required
+        fullWidth
+        SelectProps={{ native: false }}
       >
-        <option value="">Select Type</option>
-        <option value="Food">Food</option>
-        <option value="Travel">Travel</option>
-        <option value="Groceries">Groceries</option>
-        <option value="Bills">Bills</option>
-        <option value="Other">Other</option>
-      </select>
-      <input
+        <MenuItem value="">Select Type</MenuItem>
+        <MenuItem value="Food">Food</MenuItem>
+        <MenuItem value="Travel">Travel</MenuItem>
+        <MenuItem value="Groceries">Groceries</MenuItem>
+        <MenuItem value="Bills">Bills</MenuItem>
+        <MenuItem value="Other">Other</MenuItem>
+      </TextField>
+      <TextField
         name="amount"
+        label="Amount (LKR)"
         type="number"
         value={form.amount || ''}
         onChange={handleChange}
-        placeholder="Amount (LKR)"
-        className="border rounded px-2 py-1"
-        min={1}
         required
+        fullWidth
+        inputProps={{ min: 1 }}
       />
-      <button type="submit" className="bg-blue-600 text-white rounded px-4 py-2 self-end hover:bg-blue-700">
+      <Button type="submit" variant="contained" color="primary" sx={{ alignSelf: 'flex-end', minWidth: 120 }}>
         Add Expense
-      </button>
-    </form>
+      </Button>
+    </Box>
   );
 });
 

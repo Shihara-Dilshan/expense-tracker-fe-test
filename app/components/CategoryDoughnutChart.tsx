@@ -1,6 +1,8 @@
 import React from 'react';
 import { Doughnut } from 'react-chartjs-2';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
+import Paper from '@mui/material/Paper';
+import Typography from '@mui/material/Typography';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -48,12 +50,12 @@ const CategoryDoughnutChart: React.FC<CategoryDoughnutChartProps> = React.memo((
   }), []);
 
   return (
-    <div className="relative flex flex-col items-center justify-center text-gray-800" style={{ width: 220, height: 220 }}>
+    <Paper elevation={3} sx={{ width: 260, height: 260, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', position: 'relative', p: 2 }}>
       <Doughnut data={chartData} options={options} />
-      <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-        <span className="text-xs text-gray-700">Category Breakdown</span>
-      </div>
-    </div>
+      <Typography variant="caption" color="text.secondary" sx={{ position: 'absolute', bottom: 8, left: 0, right: 0, textAlign: 'center' }}>
+        Category Breakdown
+      </Typography>
+    </Paper>
   );
 });
 

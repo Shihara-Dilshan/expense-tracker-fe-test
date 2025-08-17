@@ -1,4 +1,6 @@
 import React from 'react';
+import Paper from '@mui/material/Paper';
+import Typography from '@mui/material/Typography';
 
 interface DetailedRadialChartProps {
   readonly value: number;
@@ -15,7 +17,7 @@ const DetailedRadialChart: React.FC<DetailedRadialChartProps> = React.memo(({ va
   const offset = React.useMemo(() => CIRCUMFERENCE - (percent / 100) * CIRCUMFERENCE, [percent]);
 
   return (
-    <div className="flex flex-col items-center justify-center text-gray-800" style={{ width: 140, height: 140 }}>
+    <Paper elevation={2} sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', width: 140, height: 170, p: 1, bgcolor: 'background.paper' }}>
       <svg width={120} height={120}>
         <circle cx={60} cy={60} r={RADIUS} stroke="#e5e7eb" strokeWidth={STROKE} fill="none" />
         <circle
@@ -34,11 +36,11 @@ const DetailedRadialChart: React.FC<DetailedRadialChartProps> = React.memo(({ va
           {percent.toFixed(0)}%
         </text>
       </svg>
-      <div className="text-xs text-gray-700 mt-1 text-center">
+      <Typography variant="caption" color="text.secondary" align="center" sx={{ mt: 1 }}>
         <div>Total: {total.toLocaleString()} LKR</div>
         <div>Limit: {max.toLocaleString()} LKR</div>
-      </div>
-    </div>
+      </Typography>
+    </Paper>
   );
 });
 

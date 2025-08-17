@@ -1,4 +1,7 @@
 import React from 'react';
+import Paper from '@mui/material/Paper';
+import Typography from '@mui/material/Typography';
+import LinearProgress from '@mui/material/LinearProgress';
 
 interface ExpenseStatsProps {
   readonly total: number;
@@ -8,20 +11,29 @@ interface ExpenseStatsProps {
 const ExpenseStats: React.FC<ExpenseStatsProps> = React.memo(({ total, max }) => {
   const percent = (total / max) * 100;
   return (
-    <div className="bg-white shadow rounded p-4 mb-4 text-gray-800">
-      <div className="flex justify-between mb-2">
-        <span>Total This Month</span>
-        <span className="font-bold">{total.toLocaleString()} LKR</span>
-      </div>
-      <div className="flex justify-between mb-2">
-        <span>Monthly Limit</span>
-        <span className="font-bold">{max.toLocaleString()} LKR</span>
-      </div>
-      <div className="w-full bg-gray-200 rounded-full h-3">
-        <div className="bg-blue-600 h-3 rounded-full" style={{ width: `${percent > 100 ? 100 : percent}%` }} />
-      </div>
-      <div className="text-right text-xs mt-1 text-gray-700">{percent.toFixed(1)}% used</div>
-    </div>
+    <Paper elevation={2} sx={{ p: 2, mb: 2, minWidth: 220 }}>
+      <Typography variant="subtitle1" fontWeight={600} gutterBottom>
+        Total This Month
+      </Typography>
+      <Typography variant="h6" color="primary" gutterBottom>
+        {total.toLocaleString()} LKR
+      </Typography>
+      <Typography variant="subtitle2" fontWeight={600} gutterBottom>
+        Monthly Limit
+      </Typography>
+      <Typography variant="h6" color="text.secondary" gutterBottom>
+        {max.toLocaleString()} LKR
+      </Typography>
+      <LinearProgress
+        variant="determinate"
+        value={percent > 100 ? 100 : percent}
+        sx={{ height: 8, borderRadius: 4, my: 1 }}
+        color={percent >= 90 ? 'error' : 'primary'}
+      />
+      <Typography variant="caption" color="text.secondary" align="right" display="block">
+        {percent.toFixed(1)}% used
+      </Typography>
+    </Paper>
   );
 });
 

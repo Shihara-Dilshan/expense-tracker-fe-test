@@ -1,26 +1,34 @@
 'use client';
 import React, { useState } from 'react';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
+import Paper from '@mui/material/Paper';
 
 export default function SettingsPage() {
   const [max, setMax] = useState(10000);
   return (
-    <div className="p-4 max-w-3xl mx-auto">
-      <h1 className="text-2xl font-bold mb-4">Settings</h1>
-      <form className="space-y-4">
-        <div>
-          <label className="block mb-1">Max Monthly Expense (LKR)</label>
-          <input
+    <Box sx={{ p: 2, maxWidth: 700, mx: 'auto' }}>
+      <Typography variant="h4" fontWeight="bold" mb={2}>
+        Settings
+      </Typography>
+      <Paper sx={{ p: 2 }}>
+        <Box component="form" className="space-y-4">
+          <TextField
+            label="Max Monthly Expense (LKR)"
             type="number"
-            className="border rounded px-2 py-1 w-full"
             value={max}
             onChange={(e) => setMax(Number(e.target.value))}
-            min={0}
+            fullWidth
+            inputProps={{ min: 0 }}
+            sx={{ mb: 2 }}
           />
-        </div>
-        <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded">
-          Save
-        </button>
-      </form>
-    </div>
+          <Button type="submit" variant="contained" color="primary">
+            Save
+          </Button>
+        </Box>
+      </Paper>
+    </Box>
   );
 }
