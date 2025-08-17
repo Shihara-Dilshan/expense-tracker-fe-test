@@ -8,6 +8,7 @@ import Alert from '../components/Alert';
 export default function SettingsPage() {
   const { data, isLoading, isError } = useUserBudget();
   const [max, setMax] = React.useState<string>('');
+  const [errors, setErrors] = React.useState<string | null>(null);
   const setBudgetMutation = useSetUserBudget();
 
   useEffect(() => {
@@ -16,12 +17,21 @@ export default function SettingsPage() {
     }
   }, [data]);
 
+  const validate = (value: string) => {
+    if (!value.trim()) return 'Monthly limit is required.';
+    if (/^-/.test(value)) return 'Monthly limit cannot be negative.';
+    const num = Number(value);
+    if (isNaN(num) || num <= 0) return 'Monthly limit must be a positive number.';
+    return null;
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    const error = validate(max);
+    setErrors(error);
+    if (error) return;
     const parsed = Number(max);
-    if (!isNaN(parsed)) {
-      setBudgetMutation.mutate(parsed);
-    }
+    setBudgetMutation.mutate(parsed);
   };
 
   return (
@@ -35,12 +45,17 @@ export default function SettingsPage() {
             label="Max Monthly Expense (LKR)"
             type="number"
             value={max}
-            onChange={(e) => setMax(e.target.value.replace(/^0+(?=\d)/, ''))}
+            onChange={(e) => {
+              setMax(e.target.value.replace(/^0+(?=\d)/, ''));
+              setErrors(null);
+            }}
             fullWidth
             inputProps={{ min: 0 }}
             sx={{ mb: 2 }}
             disabled={isLoading || setBudgetMutation.isPending}
             placeholder={isLoading ? 'Loading...' : ''}
+            error={!!errors}
+            helperText={errors && <span style={{ color: 'red' }}>{errors}</span>}
           />
           <Button
             type="submit"

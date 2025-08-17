@@ -7,4 +7,9 @@ export interface Expense {
   readonly amount: number;
 }
 
-export type ExpenseInput = Omit<Expense, '_id'>;
+export type ExpenseInput = {
+  description: string;
+  date: string;
+  type: string;
+  amount: number;
+};
