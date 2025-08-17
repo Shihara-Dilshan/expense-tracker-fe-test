@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react';
-import { ExpenseInput } from '../types';
+import { ExpenseInput } from '../../types';
 
 const initialState: ExpenseInput = {
   description: '',

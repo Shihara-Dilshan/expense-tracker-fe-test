@@ -1,5 +1,5 @@
 import React from 'react';
-import { Expense } from '../types';
+import { Expense } from '../../types';
 
 interface ExpenseListProps {
   readonly expenses: Expense[];

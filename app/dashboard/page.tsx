@@ -1,9 +1,9 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import Alert from '../../components/Alert';
-import ExpenseStats from '../../components/ExpenseStats';
-import ExpensePieChart from '../../components/ExpensePieChart';
-import { api } from '../../services/http';
+import Alert from '../components/Alert';
+import ExpenseStats from '../components/ExpenseStats';
+import ExpensePieChart from '../components/ExpensePieChart';
+import { api } from '../services/http-service/http';
 
 export default function DashboardPage() {
   const [maxLimit, setMaxLimit] = useState(10000);
