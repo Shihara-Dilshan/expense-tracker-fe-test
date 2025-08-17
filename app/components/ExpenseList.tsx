@@ -1,4 +1,5 @@
 import React from 'react';
+
 import { Expense } from '../../types';
 
 interface ExpenseListProps {
@@ -20,15 +21,25 @@ const ExpenseList: React.FC<ExpenseListProps> = React.memo(({ expenses, onDelete
         </tr>
       </thead>
       <tbody>
-        {expenses.map(exp => (
-          <tr key={exp.id}>
+        {expenses.map((exp) => (
+          <tr key={exp._id}>
             <td>{exp.description}</td>
             <td>{exp.date}</td>
             <td>{exp.type}</td>
-            <td>{exp.amount.toLocaleString()} <span className="text-gray-700">LKR</span></td>
+            <td>
+              {exp.amount.toLocaleString()} <span className="text-gray-700">LKR</span>
+            </td>
             <td className="flex gap-2">
-              {onEdit && <button className="text-blue-600 hover:underline" onClick={() => onEdit(exp)}>Edit</button>}
-              {onDelete && <button className="text-red-600 hover:underline" onClick={() => onDelete(exp.id)}>Delete</button>}
+              {onEdit && (
+                <button className="text-blue-600 hover:underline" onClick={() => onEdit(exp)}>
+                  Edit
+                </button>
+              )}
+              {onDelete && (
+                <button className="text-red-600 hover:underline" onClick={() => onDelete(exp._id)}>
+                  Delete
+                </button>
+              )}
             </td>
           </tr>
         ))}

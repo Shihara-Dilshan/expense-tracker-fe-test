@@ -21,7 +21,10 @@ export const useAddExpense = () => {
 export const useDeleteExpense = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: deleteExpense,
+    mutationFn: async (id: string | number) => {
+      const res = await deleteExpense(id);
+      return res;
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['expenses'] });
     },

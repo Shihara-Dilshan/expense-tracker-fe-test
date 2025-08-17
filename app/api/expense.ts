@@ -12,8 +12,9 @@ export const addExpense = async (payload: ExpenseInput): Promise<Expense> => {
   return response.data.data;
 };
 
-export const deleteExpense = async (id: string | number): Promise<void> => {
-  await api.delete(API.EXPENSE.BY_ID(id));
+export const deleteExpense = async (id: string | number): Promise<{ deleted: boolean }> => {
+  const response = await api.delete<{ deleted: boolean }>(API.EXPENSE.BY_ID(id));
+  return response.data;
 };
 
 export const getMonthlyStats = async (month: number, year: number) => {
