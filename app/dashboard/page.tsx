@@ -45,6 +45,10 @@ export default function DashboardPage() {
         </Typography>
         {isLoading ? (
           <Skeleton height={320} width={320} style={{ borderRadius: 16 }} />
+        ) : pieData.length === 0 || pieData.every(item => item.value === 0) ? (
+          <Typography color="text.secondary" align="center" sx={{ py: 6 }}>
+            No expense data to display
+          </Typography>
         ) : (
           <ExpensePieChart data={pieData} />
         )}
