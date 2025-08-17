@@ -1,6 +1,6 @@
 import { Expense, ExpenseInput } from '../types';
 import { api } from '../app/services/http-service/http';
-import { API } from './constants';
+import { API } from '../app/api/constants';
 
 export const getExpenses = async (): Promise<Expense[]> => {
   const response = await api.get<{ data: Expense[] }>(API.EXPENSE.BASE);

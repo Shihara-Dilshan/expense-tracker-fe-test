@@ -9,7 +9,7 @@ import { useAddExpense, useDeleteExpense, useExpenses } from '../api/hooks';
 
 const ExpensesPage: React.FC = () => {
   const [filter, setFilter] = useState('');
-  const { data: expenses = [], isLoading } = useExpenses();
+  const { data: expenses = [],  } = useExpenses();
   const addExpenseMutation = useAddExpense();
   const deleteExpenseMutation = useDeleteExpense();
 
@@ -30,7 +30,7 @@ const ExpensesPage: React.FC = () => {
     <div className="p-4 max-w-3xl mx-auto text-gray-800">
       <h1 className="text-2xl font-bold mb-4 text-gray-900">Expenses</h1>
       <FilterBar filter={filter} setFilter={setFilter} />
-      <ExpenseList expenses={filtered} onDelete={handleDelete} loading={isLoading} />
+      <ExpenseList expenses={filtered} onDelete={handleDelete} />
       <ExpenseForm onAdd={handleAdd} />
     </div>
   );
