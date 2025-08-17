@@ -1,14 +1,13 @@
 'use client';
 
 import React, { useState, useMemo } from 'react';
+import { ExpenseInput } from '../../types';
+import { useAddExpense, useDeleteExpense, useExpenses } from '../api/hooks';
 import FilterBar from '../components/FilterBar';
 import ExpenseList from '../components/ExpenseList';
 import ExpenseForm from '../components/ExpenseForm';
-import { ExpenseInput } from '../../types';
-import { useAddExpense, useDeleteExpense, useExpenses } from '../api/hooks';
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
-import Paper from '@mui/material/Paper';
+
+import { Box, Typography, Paper } from '@mui/material';
 
 const ExpensesPage: React.FC = () => {
   const [filter, setFilter] = useState('');

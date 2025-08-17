@@ -1,14 +1,16 @@
 'use client';
+
 import React from 'react';
+import { useMonthlyStats } from '../api/hooks';
 import Alert from '../components/Alert';
 import ExpenseStats from '../components/ExpenseStats';
 import ExpensePieChart from '../components/ExpensePieChart';
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
-import Paper from '@mui/material/Paper';
+
+import { Box, Typography, Paper } from '@mui/material';
+
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
-import { useMonthlyStats } from '../api/hooks';
+
 
 export default function DashboardPage() {
   const maxLimit = 10000;

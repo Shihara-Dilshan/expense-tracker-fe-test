@@ -1,10 +1,7 @@
 'use client';
+
 import React, { useState } from 'react';
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
-import TextField from '@mui/material/TextField';
-import Button from '@mui/material/Button';
-import Paper from '@mui/material/Paper';
+import { Box, Typography, TextField, Button, Paper } from '@mui/material';
 
 export default function SettingsPage() {
   const [max, setMax] = useState(10000);

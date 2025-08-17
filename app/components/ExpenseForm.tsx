@@ -1,9 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import { ExpenseInput } from '../../types';
-import TextField from '@mui/material/TextField';
-import Button from '@mui/material/Button';
-import MenuItem from '@mui/material/MenuItem';
-import Box from '@mui/material/Box';
+import { TextField, Button, MenuItem, Box } from '@mui/material';
 
 const initialState: ExpenseInput = {
   description: '',
