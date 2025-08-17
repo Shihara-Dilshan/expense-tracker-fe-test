@@ -39,7 +39,7 @@ const ExpensesPage: React.FC = () => {
         <ExpenseList expenses={filtered} onDelete={handleDelete} loading={isLoading} />
       </Paper>
       <Paper sx={{ p: 2 }}>
-        <ExpenseForm onAdd={handleAdd} />
+        <ExpenseForm onAdd={handleAdd} loading={addExpenseMutation.isPending} />
       </Paper>
     </Box>
   );

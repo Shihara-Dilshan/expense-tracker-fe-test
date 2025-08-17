@@ -1,8 +1,8 @@
 import React from 'react';
-import MuiAlert from '@mui/material/Alert';
+import MuiAlert, { AlertColor } from '@mui/material/Alert';
 
-const Alert = ({ message }: { message: string }) => (
-  <MuiAlert severity="warning" sx={{ mb: 2 }}>
+const Alert = ({ message, severity = 'warning' }: { message: string; severity?: AlertColor }) => (
+  <MuiAlert severity={severity} sx={{ mb: 2 }}>
     {message}
   </MuiAlert>
 );

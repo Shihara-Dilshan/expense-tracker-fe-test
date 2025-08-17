@@ -14,9 +14,10 @@ const initialState: ExpenseInput = {
 
 interface ExpenseFormProps {
   readonly onAdd: (exp: ExpenseInput) => void;
+  readonly loading?: boolean;
 }
 
-const ExpenseForm: React.FC<ExpenseFormProps> = React.memo(({ onAdd }) => {
+const ExpenseForm: React.FC<ExpenseFormProps> = React.memo(({ onAdd, loading }) => {
   const [form, setForm] = useState<ExpenseInput>(initialState);
 
   const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
@@ -84,8 +85,8 @@ const ExpenseForm: React.FC<ExpenseFormProps> = React.memo(({ onAdd }) => {
         fullWidth
         inputProps={{ min: 1 }}
       />
-      <Button type="submit" variant="contained" color="primary" sx={{ alignSelf: 'flex-end', minWidth: 120 }}>
-        Add Expense
+      <Button type="submit" variant="contained" color="primary" sx={{ alignSelf: 'flex-end', minWidth: 120 }} disabled={loading}>
+        {loading ? 'Adding...' : 'Add Expense'}
       </Button>
     </Box>
   );

@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { getExpenses, addExpense, deleteExpense } from './expense';
+import { getExpenses, addExpense, deleteExpense, getMonthlyStats } from './expense';
 
 export const useExpenses = () => {
   return useQuery({
@@ -28,5 +28,12 @@ export const useDeleteExpense = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['expenses'] });
     },
+  });
+};
+
+export const useMonthlyStats = (month: number, year: number) => {
+  return useQuery({
+    queryKey: ['monthlyStats', month, year],
+    queryFn: () => getMonthlyStats(month, year),
   });
 };
