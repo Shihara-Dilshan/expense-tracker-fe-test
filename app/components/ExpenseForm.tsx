@@ -23,6 +23,13 @@ const ExpenseForm: React.FC<ExpenseFormProps> = React.memo(({ onAdd, loading }) 
     const errs: { [K in keyof ExpenseInput]?: string } = {};
     if (!f.description.trim()) errs.description = 'Description is required.';
     if (!f.date) errs.date = 'Date is required.';
+    else {
+      const today = new Date();
+      const inputDate = new Date(f.date);
+      today.setHours(0,0,0,0);
+      inputDate.setHours(0,0,0,0);
+      if (inputDate > today) errs.date = 'Date cannot be in the future.';
+    }
     if (!f.type) errs.type = 'Type is required.';
     if (!f.amount || f.amount <= 0) errs.amount = 'Amount must be greater than 0.';
     return errs;
@@ -80,6 +87,15 @@ const ExpenseForm: React.FC<ExpenseFormProps> = React.memo(({ onAdd, loading }) 
         InputLabelProps={{ shrink: true }}
         error={!!errors.date}
         helperText={errors.date && <span style={{ color: 'red' }}>{errors.date}</span>}
+        inputProps={{
+          max: new Date().toISOString().split('T')[0],
+        }}
+        onClick={(e) => {
+          const input = e.currentTarget.querySelector('input');
+          if (input && typeof input.showPicker === 'function') {
+            input.showPicker();
+          }
+        }}
       />
       <TextField
         name="type"
