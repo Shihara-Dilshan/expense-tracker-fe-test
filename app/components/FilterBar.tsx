@@ -8,7 +8,9 @@ const FilterBar = ({ filter, setFilter }: { filter: string; setFilter: (v: strin
     onChange={(e) => setFilter(e.target.value)}
     variant="outlined"
     fullWidth
-    sx={{ mb: 2 }}
+    sx={{ mb: 2, backgroundColor: 'white', borderRadius: 1 }}
+    InputLabelProps={{ style: { color: '#333' } }}
+    InputProps={{ style: { color: '#222' } }}
   />
 );
 

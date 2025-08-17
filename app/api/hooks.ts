@@ -2,10 +2,13 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { getExpenses, addExpense, deleteExpense, getUserBudget, setUserBudget } from './expense';
 import { Expense } from '../../types'; 
 
-export const useExpenses = () => {
+export const useExpenses = (params?: { page?: number; limit?: number; description?: string }) => {
   return useQuery({
-    queryKey: ['expenses'],
-    queryFn: getExpenses,
+    queryKey: ['expenses', params],
+    queryFn: ({ queryKey }) => {
+      const [, queryParams] = queryKey as [string, typeof params];
+      return getExpenses(queryParams);
+    },
   });
 };
 
@@ -36,12 +39,16 @@ export const useMonthlyStats = (month: number, year: number) => {
   return useQuery({
     queryKey: ['monthlyStats', month, year],
     queryFn: async () => {
-      const allExpenses: Expense[] = await getExpenses();
+      const paginated = await getExpenses();
+      const allExpenses = paginated.results;
+      // Filter for the given month/year
       const filtered: Expense[] = allExpenses.filter((e) => {
         const d = new Date(e.date);
         return d.getMonth() + 1 === month && d.getFullYear() === year;
       });
+      // Calculate total
       const total = filtered.reduce((sum: number, e: Expense) => sum + Number(e.amount), 0);
+      // Build breakdown by type/category
       const breakdown: Record<string, number> = {};
       filtered.forEach((e: Expense) => {
         breakdown[e.type] = (breakdown[e.type] || 0) + Number(e.amount);

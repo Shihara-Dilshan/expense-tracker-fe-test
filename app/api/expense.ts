@@ -2,8 +2,16 @@ import { Expense, ExpenseInput } from '../../types';
 import { api } from '../services/http-service/http';
 import { API } from './constants';
 
-export const getExpenses = async (): Promise<Expense[]> => {
-  const response = await api.get<{ data: Expense[] }>(API.EXPENSE.BASE);
+export interface PaginatedExpenseResults {
+  results: Expense[];
+  page: number;
+  limit: number;
+  totalPages: number;
+  totalResults: number;
+}
+
+export const getExpenses = async (params?: { page?: number; limit?: number; description?: string }): Promise<PaginatedExpenseResults> => {
+  const response = await api.get<{ data: PaginatedExpenseResults }>(API.EXPENSE.BASE, { params });
   return response.data.data;
 };
 
