@@ -1,20 +1,31 @@
 'use client';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Alert from '../../components/Alert';
 import ExpenseStats from '../../components/ExpenseStats';
 import ExpensePieChart from '../../components/ExpensePieChart';
+import { api } from '../../services/http';
 
 export default function DashboardPage() {
-  const maxLimit = 10000;
-  const totalThisMonth = 9200;
+  const [maxLimit, setMaxLimit] = useState(10000);
+  const [totalThisMonth, setTotalThisMonth] = useState(0);
+  const [pieData, setPieData] = useState<{ label: string; value: number }[]>([]);
+
+  useEffect(() => {
+    // Fetch monthly stats
+    const now = new Date();
+    api.get<{ data: { total: number; breakdown: Record<string, number> } }>(
+      `/expense/stats/monthly?month=${now.getMonth() + 1}&year=${now.getFullYear()}`
+    ).then(res => {
+      setTotalThisMonth(res.data.data.total || 0);
+      setPieData(
+        Object.entries(res.data.data.breakdown || {}).map(([label, value]) => ({ label, value }))
+      );
+    });
+    // Optionally fetch maxLimit from settings API if available
+  }, []);
+
   const percent = (totalThisMonth / maxLimit) * 100;
-  const pieData = [
-    { label: 'Food', value: 10 },
-    { label: 'Travel', value: 20 },
-    { label: 'Groceries', value: 30 },
-    { label: 'Bills', value: 15 },
-    { label: 'Other', value: 25 },
-  ];
+
   return (
     <>
       <div className="p-4 max-w-3xl mx-auto">

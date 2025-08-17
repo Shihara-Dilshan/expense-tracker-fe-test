@@ -1,19 +1,22 @@
 'use client';
 
-import React, { useState, useMemo, useCallback } from 'react';
+import React, { useState, useMemo, useCallback, useEffect } from 'react';
 import { Expense, ExpenseInput } from '../../types';
 import FilterBar from '../../components/FilterBar';
 import ExpenseList from '../../components/ExpenseList';
 import ExpenseForm from '../../components/ExpenseForm';
-
-const initialExpenses: readonly Expense[] = [
-  { id: 1, description: 'Groceries', date: '2025-08-10', type: 'Food', amount: 2500 },
-  { id: 2, description: 'Bus Ticket', date: '2025-08-12', type: 'Travel', amount: 200 },
-];
+import { api } from '../../services/http';
 
 const ExpensesPage: React.FC = () => {
-  const [expenses, setExpenses] = useState<readonly Expense[]>(initialExpenses);
+  const [expenses, setExpenses] = useState<readonly Expense[]>([]);
   const [filter, setFilter] = useState('');
+
+  // Fetch expenses from API
+  useEffect(() => {
+    api.get<{ data: Expense[] }>('/expense')
+      .then(res => setExpenses(res.data.data))
+      .catch(() => setExpenses([]));
+  }, []);
 
   const filtered = useMemo(
     () => expenses.filter((e) => e.description.toLowerCase().includes(filter.toLowerCase())),
@@ -21,15 +24,21 @@ const ExpensesPage: React.FC = () => {
   );
 
   const handleDelete = useCallback(
-    (id: number) => {
-      setExpenses((prev) => prev.filter((e) => e.id !== id));
+    async (id: number | string) => {
+      try {
+        await api.delete(`/expense/${id}`);
+        setExpenses((prev) => prev.filter((e) => e.id !== id));
+      } catch {}
     },
     []
   );
 
   const handleAdd = useCallback(
-    (exp: ExpenseInput) => {
-      setExpenses((prev) => [...prev, { ...exp, id: Date.now() }]);
+    async (exp: ExpenseInput) => {
+      try {
+        const res = await api.post<{ data: Expense }>('/expense', exp);
+        setExpenses((prev) => [...prev, res.data.data]);
+      } catch {}
     },
     []
   );
