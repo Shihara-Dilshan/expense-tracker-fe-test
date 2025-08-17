@@ -1,11 +1,14 @@
 'use client';
 
+import { Box, Button, CircularProgress, Paper, TextField, Typography } from '@mui/material';
+import { useQueryClient } from '@tanstack/react-query';
 import React, { useEffect } from 'react';
-import { Box, Typography, TextField, Button, Paper, CircularProgress } from '@mui/material';
-import { useUserBudget, useSetUserBudget } from '../api/hooks';
+
+import { useSetUserBudget, useUserBudget } from '../api/hooks';
 import Alert from '../components/Alert';
 
 export default function SettingsPage() {
+  const queryClient = useQueryClient();
   const { data, isLoading, isError } = useUserBudget();
   const [max, setMax] = React.useState<string>('');
   const [errors, setErrors] = React.useState<string | null>(null);
@@ -31,7 +34,12 @@ export default function SettingsPage() {
     setErrors(error);
     if (error) return;
     const parsed = Number(max);
-    setBudgetMutation.mutate(parsed);
+    setBudgetMutation.mutate(parsed, {
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: ['userBudget'] });
+        queryClient.invalidateQueries({ queryKey: ['monthlyStats'] });
+      },
+    });
   };
 
   return (
@@ -62,8 +70,7 @@ export default function SettingsPage() {
             variant="contained"
             color="primary"
             disabled={setBudgetMutation.isPending || isLoading || max === ''}
-            startIcon={setBudgetMutation.isPending ? <CircularProgress size={18} /> : null}
-          >
+            startIcon={setBudgetMutation.isPending ? <CircularProgress size={18} /> : null}>
             {setBudgetMutation.isPending ? 'Saving...' : 'Save'}
           </Button>
           {setBudgetMutation.isSuccess && <Alert message="Budget updated successfully!" severity="success" />}

@@ -10,8 +10,14 @@ export interface PaginatedExpenseResults {
   totalResults: number;
 }
 
-export const getExpenses = async (params?: { page?: number; limit?: number; description?: string }): Promise<PaginatedExpenseResults> => {
-  const response = await api.get<{ data: PaginatedExpenseResults }>(API.EXPENSE.BASE, { params });
+export const getExpenses = async (params?: { page?: number; limit?: number; description?: string }) => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const queryParams: Record<string, any> = { ...params };
+  if (queryParams.description) {
+    queryParams.search = queryParams.description;
+    delete queryParams.description;
+  }
+  const response = await api.get<{ data: PaginatedExpenseResults }>(API.EXPENSE.BASE, { params: queryParams });
   return response.data.data;
 };
 

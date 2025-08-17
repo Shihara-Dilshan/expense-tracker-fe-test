@@ -1,7 +1,8 @@
 'use client';
 
 import { Box, Pagination, Paper, Snackbar, Typography } from '@mui/material';
-import React, { useState } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
+import React, { useEffect, useState } from 'react';
 
 import { ExpenseInput } from '../../types';
 import { useAddExpense, useDeleteExpense, useExpenses } from '../api/hooks';
@@ -12,15 +13,22 @@ import FilterBar from '../components/FilterBar';
 
 const ExpensesPage: React.FC = () => {
   const [filter, setFilter] = useState('');
+  const [debouncedFilter, setDebouncedFilter] = useState(filter);
   const [page, setPage] = useState(1);
   const [limit] = useState(10);
 
-  const { data, isLoading } = useExpenses({ page, limit, description: filter });
+  useEffect(() => {
+    const handler = setTimeout(() => setDebouncedFilter(filter), 400);
+    return () => clearTimeout(handler);
+  }, [filter]);
+
+  const { data, isLoading } = useExpenses({ page, limit, description: debouncedFilter });
   const expenses = data?.results || [];
   const totalPages = data?.totalPages || 1;
 
   const addExpenseMutation = useAddExpense();
   const deleteExpenseMutation = useDeleteExpense();
+  const queryClient = useQueryClient();
 
   const [alert, setAlert] = useState<{
     open: boolean;
@@ -35,6 +43,7 @@ const ExpensesPage: React.FC = () => {
       await deleteExpenseMutation.mutateAsync(id);
       setAlert({ open: true, message: 'Expense deleted successfully!', severity: 'success' });
       setSnackbarKey((prev) => prev + 1);
+      queryClient.invalidateQueries({ queryKey: ['monthlyStats'] });
     } catch {
       setAlert({ open: true, message: 'Failed to delete expense.', severity: 'error' });
       setSnackbarKey((prev) => prev + 1);
@@ -46,6 +55,7 @@ const ExpensesPage: React.FC = () => {
       await addExpenseMutation.mutateAsync(exp);
       setAlert({ open: true, message: 'Expense added successfully!', severity: 'success' });
       setSnackbarKey((prev) => prev + 1);
+      queryClient.invalidateQueries({ queryKey: ['monthlyStats'] });
     } catch {
       setAlert({ open: true, message: 'Failed to add expense.', severity: 'error' });
       setSnackbarKey((prev) => prev + 1);
