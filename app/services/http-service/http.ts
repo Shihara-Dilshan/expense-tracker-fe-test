@@ -1,6 +1,6 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
 
-class HttpService {
+export class HttpService {
   private axiosInstance: AxiosInstance;
 
   constructor(baseURL: string, defaultConfig?: AxiosRequestConfig) {
